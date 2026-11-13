@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vite/
+storage/database/*.sqlite*
+storage/backups/*
+!storage/backups/.gitkeep
+data/cache/*
+!data/cache/.gitkeep
+.env

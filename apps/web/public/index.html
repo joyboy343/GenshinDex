@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090d1b" />
+    <meta name="description" content="GenshinDex local account foundation" />
+    <title>GenshinDex</title>
+    <link rel="stylesheet" href="/app.css" />
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="GenshinDex home"><span class="brand-mark">✦</span> GenshinDex</a>
+      <div class="topbar-right"><span class="local-indicator"><span></span> Local workspace</span><button class="account-button" id="account-toggle">Choose account <span>⌄</span></button></div>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="eyebrow"><span class="eyebrow-line"></span> YOUR COMPANION, YOURS ALONE</div>
+        <h1>Every journey<br /><em>starts somewhere.</em></h1>
+        <p class="intro">A quiet place to bring your Genshin accounts together.<br class="desktop" /> Your data stays here, on this device.</p>
+        <div class="hero-actions"><button class="primary" id="new-account">Create an account <span>＋</span></button><span class="privacy-note"><span>◈</span> Stored locally · no game login required</span></div>
+      </section>
+      <section class="grid" aria-label="Workspace overview">
+        <article class="panel account-panel">
+          <div class="panel-heading"><div><span class="section-kicker">YOUR COLLECTION</span><h2>Accounts</h2></div><span class="count" id="account-count">0</span></div>
+          <div id="account-list" class="account-list"><div class="empty-state"><span class="empty-orbit">✧</span><span>No accounts yet</span><small>Create a local profile to get started.</small></div></div>
+          <button class="text-action" id="add-account">Add an account <span>↗</span></button>
+        </article>
+        <article class="panel status-panel">
+          <div class="panel-heading"><div><span class="section-kicker">FOUNDATION</span><h2>System status</h2></div><span class="status-pill"><span></span> Ready</span></div>
+          <div class="status-list">
+            <div class="status-row"><span class="status-icon">◈</span><div><strong>Local database</strong><small>SQLite · stored on this device</small></div><span class="check">✓</span></div>
+            <div class="status-row"><span class="status-icon">⌘</span><div><strong>Account isolation</strong><small>Profiles stored independently</small></div><span class="check">✓</span></div>
+            <div class="status-row"><span class="status-icon">⟳</span><div><strong>Worker service</strong><small>Background jobs available</small></div><span class="check">✓</span></div>
+          </div>
+          <button class="text-action" id="run-job">Run infrastructure check <span>↗</span></button>
+          <div id="job-status" class="job-status" aria-live="polite"></div>
+        </article>
+      </section>
+      <section class="panel knowledge-panel" aria-labelledby="knowledge-title">
+        <div class="panel-heading"><div><span class="section-kicker">GAME REFERENCE</span><h2 id="knowledge-title">Knowledge Library</h2></div><span class="local-indicator">Offline search</span></div>
+        <p class="knowledge-intro">Browse saved mechanics notes with their sources, confidence status, and known limitations.</p>
+        <form class="knowledge-search" id="knowledge-search-form">
+          <label class="visually-hidden" for="knowledge-query">Search knowledge</label>
+          <input id="knowledge-query" type="search" maxlength="100" placeholder="Search mechanics, reactions, terms..." autocomplete="off" />
+          <button class="primary" type="submit">Search <span>⌕</span></button>
+        </form>
+        <div class="knowledge-filter-row">
+          <label for="knowledge-verification">Verification</label>
+          <select id="knowledge-verification">
+            <option value="">All states</option>
+            <option value="verified">Verified</option>
+            <option value="community-confirmed">Community-confirmed</option>
+            <option value="experimental">Experimental</option>
+            <option value="conflicting">Conflicting</option>
+            <option value="deprecated">Deprecated</option>
+          </select>
+        </div>
+        <p class="knowledge-status" id="knowledge-status" role="status" aria-live="polite"></p>
+        <div class="knowledge-results" id="knowledge-results"></div>
+        <details class="knowledge-update">
+          <summary>Character catalog · Enka static definitions</summary>
+          <p>This imports static avatar definitions only. Names resolve from a separately reviewed localization snapshot where hashes match; unmatched names remain unresolved. This does not import or infer an account roster. The source is contacted only when you request a preview.</p>
+          <div class="knowledge-update-actions"><button class="text-action" id="preview-character-catalog" type="button">Fetch catalog preview <span>↗</span></button><button class="primary" id="approve-character-catalog" type="button" disabled>Approve catalog</button></div>
+          <p class="knowledge-update-status" id="character-catalog-status" role="status" aria-live="polite"></p>
+          <div id="character-catalog-preview"></div>
+          <details class="knowledge-update">
+            <summary>Offline Enka localization import</summary>
+            <p>Stage Enka's <code>store/gi/locs.json</code> as <code>storage/imports/enka/locs.json</code>, then run <code>npm run enka-l10n:preview</code>. The preview reports recognized languages and changes; approval activates labels for matching text hashes without changing the original IDs.</p>
+            <button class="text-action" id="refresh-enka-localizations" type="button">Refresh localization drafts</button>
+            <p class="knowledge-update-status" id="enka-localizations-status" role="status" aria-live="polite"></p>
+            <div id="enka-localizations-list"></div>
+          </details>
+        </details>
+        <details class="knowledge-update">
+          <summary>Character-reference coverage · KeqingMains TCL</summary>
+          <p>Import the KQM character-page index to track page coverage. These records show that a reference page exists; they do not provide verified playable-roster completeness or imply that a full build guide exists.</p>
+          <div class="knowledge-update-actions"><button class="text-action" id="preview-kqm-guides" type="button">Fetch coverage preview <span>↗</span></button><button class="primary" id="approve-kqm-guides" type="button" disabled>Approve coverage</button></div>
+          <p class="knowledge-update-status" id="kqm-guides-status" role="status" aria-live="polite"></p>
+          <div id="kqm-guides-preview"></div>
+          <button class="text-action" id="refresh-kqm-index-drafts" type="button">Refresh coverage drafts</button>
+          <div id="kqm-index-drafts"></div>
+          <h3>Offline page evidence</h3>
+          <p>Stage a downloaded index at <code>storage/imports/kqm-tcl/index.html</code> and approved character pages as <code>storage/imports/kqm-tcl/pages/&lt;slug&gt;.html</code>. Run <code>npm run kqm-index:preview</code>, review and approve the index, then run <code>npm run kqm-pages:preview</code>. Extracted text and displayed table values stay experimental and cannot feed calculations.</p>
+          <button class="text-action" id="refresh-kqm-evidence-drafts" type="button">Refresh page evidence drafts</button>
+          <button class="text-action" id="refresh-kqm-approved-evidence" type="button">Browse approved page evidence</button>
+          <p class="knowledge-update-status" id="kqm-evidence-status" role="status" aria-live="polite"></p>
+          <div id="kqm-evidence-list"></div>
+        </details>
+        <details class="knowledge-update">
+          <summary>Cross-source character reconciliation</summary>
+          <p>Compare approved Genshin-DB, Enka, and KQM TCL records. Numeric IDs are stronger links; exact normalized English names are suggestions. Field disagreements remain visible. This report never merges records or treats a guide page as proof of playable status.</p>
+          <div class="knowledge-update-actions">
+            <label for="reconciliation-status-filter">Review status</label>
+            <select id="reconciliation-status-filter"><option value="all">All candidates</option><option value="conflicts">Has conflicts</option><option value="id-match">ID match</option><option value="name-match">Name suggestion</option><option value="ambiguous-id">Ambiguous ID</option><option value="ambiguous-name">Ambiguous name</option><option value="gdb-only">Genshin-DB only</option><option value="enka-only">Enka only</option></select>
+            <label class="visually-hidden" for="reconciliation-search">Search candidates</label>
+            <input id="reconciliation-search" type="search" placeholder="Search character or source key">
+            <button class="text-action" id="run-character-reconciliation" type="button">Refresh reconciliation</button>
+          </div>
+          <p class="knowledge-update-status" id="reconciliation-status" role="status" aria-live="polite"></p>
+          <div id="reconciliation-summary"></div>
+          <div id="reconciliation-results"></div>
+          <button class="text-action" id="reconciliation-load-more" type="button" hidden>Load more candidates</button>
+          <div class="knowledge-update">
+            <button class="text-action" id="save-reconciliation-snapshot" type="button">Save full reconciliation snapshot</button>
+            <button class="text-action" id="refresh-reconciliation-history" type="button">Refresh reconciliation history</button>
+            <div id="reconciliation-history"></div>
+          </div>
+          <details class="knowledge-update">
+            <summary>Reviewed canonical character projection</summary>
+            <p>This computed view includes only accepted identity links. Agreement is shown separately from single-source values and unresolved field conflicts. It is not eligible for authoritative calculations.</p>
+            <button class="text-action" id="load-canonical-projection" type="button">Load accepted projection</button>
+            <button class="text-action" id="save-canonical-projection" type="button">Save current projection snapshot</button>
+            <button class="text-action" id="refresh-canonical-snapshot-history" type="button">Refresh snapshot history</button>
+            <p class="knowledge-update-status" id="canonical-projection-status" role="status" aria-live="polite"></p>
+            <div id="canonical-projection-results"></div>
+            <h3>Saved projection snapshots</h3>
+            <div id="canonical-projection-history"></div>
+          </details>
+        </details>
+        <details class="knowledge-update">
+          <summary>Offline Genshin-DB snapshot import</summary>
+          <p>Place <code>english-characters.min.json.gzip</code> in <code>storage/imports/genshin-db/</code>. Talents and constellations are optional. You can also stage English weapons, artifacts, materials, enemies, domains, crafts, geographies, and achievements gzip files from the same pinned release. Include <code>genshin-db.version</code> when available. Run <code>npm run game-data:preview</code> from the project folder. Imported records remain source candidates and do not modify account inventories.</p>
+          <button class="text-action" id="refresh-local-imports" type="button">Refresh local drafts <span>↻</span></button>
+          <p class="knowledge-update-status" id="local-imports-status" role="status" aria-live="polite"></p>
+          <div id="local-imports-list"></div>
+          <div class="knowledge-update-actions">
+            <label for="genshin-db-category">Approved catalog category</label>
+            <select id="genshin-db-category"><option value="weapons">Weapons</option><option value="artifacts">Artifacts</option><option value="materials">Materials</option><option value="enemies">Enemies</option><option value="domains">Domains</option><option value="crafts">Crafting</option><option value="geographies">Geographies</option><option value="achievements">Achievements</option></select>
+            <label class="visually-hidden" for="genshin-db-search">Search category</label>
+            <input id="genshin-db-search" type="search" placeholder="Filter by name or source data">
+            <button class="text-action" id="browse-genshin-db" type="button">Browse approved data</button>
+          </div>
+          <p class="knowledge-update-status" id="genshin-db-browser-status" role="status" aria-live="polite"></p>
+          <div id="genshin-db-browser-list"></div>
+          <button class="text-action" id="genshin-db-load-more" type="button" hidden>Load more records</button>
+        </details>
+        <details class="knowledge-update">
+          <summary>Review a knowledge dataset update</summary>
+          <p>Paste a canonical dataset JSON document to validate it and see a change preview. Nothing becomes active until you approve it.</p>
+          <label class="visually-hidden" for="knowledge-dataset-json">Dataset JSON</label>
+          <textarea id="knowledge-dataset-json" rows="6" spellcheck="false" placeholder="Paste dataset JSON with a key, version, entries, and source records"></textarea>
+          <div class="knowledge-update-actions"><button class="text-action" id="preview-knowledge-dataset" type="button">Preview update <span>→</span></button><button class="primary" id="approve-knowledge-dataset" type="button" disabled>Approve update</button></div>
+          <p class="knowledge-update-status" id="knowledge-update-status" role="status" aria-live="polite"></p>
+          <div id="knowledge-update-preview"></div>
+        </details>
+        <details class="source-catalog">
+          <summary>Browse registered game-data sources and coverage</summary>
+          <p>Registered sources show intended coverage and limits. They are not a claim that each source adapter or full dataset is already installed.</p>
+          <p class="knowledge-status" id="source-catalog-status" role="status" aria-live="polite"></p>
+          <div class="source-catalog-list" id="source-catalog-list"></div>
+        </details>
+      </section>
+      <footer><span>GENSHINDEX</span></footer>
+    </main>
+    <dialog id="account-dialog">
+      <form id="account-form">
+        <div class="dialog-top"><span class="section-kicker">NEW LOCAL PROFILE</span><button type="button" id="close-dialog" class="close" aria-label="Close">×</button></div>
+        <h2>Name your account</h2><p>Keep multiple game accounts organized in separate local profiles.</p>
+        <label for="nickname">Nickname</label><input id="nickname" name="nickname" maxlength="80" required placeholder="e.g. Main account" />
+        <label for="server">Server</label><select id="server" name="server"><option value="unknown">Not set</option><option value="os_usa">America</option><option value="os_europe">Europe</option><option value="os_asia">Asia</option><option value="os_cht">TW, HK, MO</option></select>
+        <label for="uid">UID <span class="optional">optional</span></label><input id="uid" name="uid" inputmode="numeric" pattern="[0-9]{9,10}" maxlength="10" placeholder="9 or 10 digits" />
+        <div class="form-error" id="form-error" role="alert"></div><button class="primary submit" type="submit">Create profile <span>→</span></button>
+      </form>
+    </dialog>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

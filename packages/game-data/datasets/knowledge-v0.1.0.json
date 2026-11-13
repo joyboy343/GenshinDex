@@ -1,0 +1,33 @@
+{
+  "key": "knowledge-core",
+  "version": "0.1.0",
+  "provenance": "Bundled GenshinDex knowledge seed. External source metadata is attached to each entry.",
+  "entries": [
+    {
+      "slug": "elemental-application-and-icd-basics",
+      "category": "combat-mechanics",
+      "title": "Elemental application and internal cooldowns",
+      "summary": "An elemental hit can deal elemental damage without applying an element or triggering a reaction on that hit. Internal cooldown behavior depends on the elemental source.",
+      "content": "Elemental damage and elemental application are separate outcomes. Internal cooldown (ICD) can limit how often a source applies an element, triggers a reaction, or produces certain damage and poise events. A commonly described pattern uses both a hit count and a timer, but ability-specific sequences can differ, separate abilities can share ICD, and some sources have no ICD. Treat standard ICD shorthand as a general explanation only; use attack-specific evidence for calculations.",
+      "keywords": ["elemental application", "internal cooldown", "ICD", "aura", "trigger", "elemental gauge", "reaction"],
+      "verificationState": "community-confirmed",
+      "confidence": null,
+      "limitations": [
+        "This is a general concept entry, not an attack-by-attack dataset.",
+        "The cited reference describes a simplified, commonly accepted overview and notes that source behavior varies.",
+        "GenshinDex has not independently tested the current game version; do not use this entry as an authoritative simulation parameter."
+      ],
+      "gameVersion": null,
+      "sources": [
+        {
+          "title": "Internal Cooldown",
+          "publisher": "KeqingMains Theorycrafting Library",
+          "url": "https://library.keqingmains.com/combat-mechanics/internal-cooldown",
+          "checkedAt": "2026-11-12",
+          "sourceVersion": null,
+          "notes": "Community theorycrafting reference. Its overview distinguishes the common shorthand from ability-specific exceptions."
+        }
+      ]
+    }
+  ]
+}
